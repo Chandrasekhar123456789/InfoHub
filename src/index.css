@@ -1,0 +1,117 @@
+
+:root{
+  --bg-1: #f8fafc;
+  --mint: #a7f3d0;
+  --peach: #ffedd5;
+  --lav: #f3e8ff;
+  --card-bg: rgba(255,255,255,0.8);
+  --glass-border: rgba(15,23,42,0.04);
+  --muted: #6b7280;
+  --accent-1: #06b6d4;
+  --accent-3: #7c3aed;
+  --radius: 12px;
+  --ease: cubic-bezier(0.4,0,0.2,1);
+  color-scheme: light;
+}
+
+*{box-sizing:border-box}
+html,body,#root{height:100%}
+body{
+  margin:0;
+  font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background: linear-gradient(120deg, rgba(167,243,208,0.25), rgba(255,237,213,0.25), rgba(243,232,255,0.25));
+  background-blend-mode: screen;
+  color: #0f172a;
+  padding:28px;
+  -webkit-font-smoothing:antialiased;
+  transition: background 600ms var(--ease);
+  position:relative;
+  overflow-y:auto;
+}
+
+@keyframes pastelDrift {
+  0% { transform: translate3d(-2%, -1%, 0); }
+  50% { transform: translate3d(2%, 1%, 0); }
+  100% { transform: translate3d(-2%, -1%, 0); }
+}
+body::before{
+  content:"";
+  position:fixed;
+  inset:-10% -10% -10% -10%;
+  background: radial-gradient(600px 300px at 10% 20%, rgba(167,243,208,0.35), transparent 12%),
+              radial-gradient(500px 260px at 90% 80%, rgba(255,237,213,0.28), transparent 12%),
+              radial-gradient(700px 360px at 50% 40%, rgba(243,232,255,0.22), transparent 12%);
+  z-index:0;
+  filter: blur(40px) saturate(120%);
+  animation: pastelDrift 20s linear infinite;
+  pointer-events:none;
+  mix-blend-mode: screen;
+}
+
+/* card */
+.card {
+  background: var(--card-bg);
+  border-radius: var(--radius);
+  padding: 16px;
+  box-shadow: 0 6px 18px rgba(15,23,42,0.06);
+  border: 1px solid var(--glass-border);
+  backdrop-filter: blur(8px) saturate(120%);
+  position:relative;
+  z-index:1;
+}
+
+.quote-wrap { display:flex; gap:14px; flex-direction:column; margin-top:6px; }
+.quote-card { border-radius:10px; overflow:hidden; transition: transform 400ms var(--ease), box-shadow 300ms var(--ease); transform-origin:center; }
+.quote-inner { padding:16px; background: linear-gradient(180deg, rgba(255,255,255,0.95), rgba(250,250,250,0.98)); border-radius:10px; position:relative; }
+
+@keyframes popInLight {
+  from { opacity:0; transform: translateY(10px) scale(0.99); }
+  to { opacity:1; transform: translateY(0) scale(1); }
+}
+.pop-in { animation: popInLight 600ms var(--ease) both; }
+
+@keyframes floatyLight { 0%{ transform: translateY(0);} 50%{ transform: translateY(-6px);} 100%{ transform: translateY(0);} }
+.quote-float { animation: floatyLight 6s ease-in-out infinite; }
+
+.quote-card:hover { transform: translateY(-6px) rotateX(3deg) rotateY(-2deg) scale(1.01); box-shadow:0 18px 40px rgba(15,23,42,0.08); }
+
+.quote-inner::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  background: linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.6) 50%, rgba(255,255,255,0) 100%);
+  transform: translateX(-120%);
+  pointer-events:none;
+  transition: transform 700ms var(--ease), opacity 300ms var(--ease);
+  mix-blend-mode: overlay;
+  opacity:0;
+}
+.quote-card:hover .quote-inner::after{
+  transform: translateX(120%);
+  opacity:0.65;
+}
+
+.quote-text { font-size:1.05rem; line-height:1.45; color:#0b1220; margin:0; font-style: italic; }
+.quote-author { font-size:0.9rem; color:var(--muted); margin-top:10px; display:block; }
+
+.controls { display:flex; gap:10px; align-items:center; }
+.btn { border:none; padding:8px 12px; border-radius:10px; cursor:pointer; font-weight:600; transition: transform 160ms var(--ease); }
+.btn:active{ transform: translateY(1px); }
+.btn-ghost { background: transparent; color:var(--muted); border:1px solid rgba(15,23,42,0.06); }
+.btn-accent { background: linear-gradient(90deg,var(--accent-1),var(--accent-3)); color:white; box-shadow:0 8px 20px rgba(124,58,237,0.12); }
+
+.select-small { padding:8px 10px; border-radius:8px; border:1px solid rgba(15,23,42,0.06); background:white; font-weight:600; }
+
+.quote-footer { text-align:center; margin-top:14px; font-size:0.85rem; color: rgba(15,23,42,0.45); }
+.quote-footer .accent { color: rgba(124,58,237,0.9); margin-left:6px; }
+
+@media (min-width:900px){
+  .quote-wrap{flex-direction:row; flex-wrap:wrap;}
+  .quote-card{ width: calc(50% - 14px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .pop-in, .quote-float, body::before { animation: none !important; }
+  .quote-card:hover { transform:none; }
+  .quote-inner::after { transition:none; opacity:0; }
+}
